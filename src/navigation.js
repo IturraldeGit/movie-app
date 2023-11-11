@@ -26,6 +26,9 @@ function navigator() {
     } else {
         homePage();
     }
+
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
 }
 
 
@@ -97,6 +100,13 @@ function categoriesPage() {
     categoriesPreviewSection.classList.add('inactive');
     genericSection.classList.remove('inactive');
     movieDetailSection.classList.add('inactive');
+
+    const [_, categoryData] = location.hash.split('='); // ['#category', 'id-name']
+    const [categoryId, categoryName] = categoryData.split('-');
+
+    headerCategoryTitle.innerHTML = decodeURIComponent(categoryName);
+    
+    getMoviesByCategory(categoryId);
 
 }
 
