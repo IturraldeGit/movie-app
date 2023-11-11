@@ -130,4 +130,4 @@ dist
 .pnp.*
 
 # Hidden.js (API KEY)
-src/hidden.js
+# src/hidden.js
