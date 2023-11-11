@@ -1,11 +1,20 @@
+let historyArr = [];
+
 searchFormBtn.addEventListener('click', () => {
     location.hash = '#search=' + searchFormInput.value;
+    historyArr.push(location.hash);
 })
 trendingBtn.addEventListener('click', () => {
     location.hash = '#trends';
 })
 arrowBtn.addEventListener('click', () => {
-    location.hash = '#home';
+    if (historyArr.length > 1) {
+        location.hash = historyArr[historyArr.length - 2];
+        historyArr.splice(-1,1);
+    } else {
+        historyArr.pop();
+        location.hash = '#home';
+    }
 })
 
 window.addEventListener('DOMContentLoaded', navigator, false);
@@ -47,6 +56,10 @@ function trendsPage() {
     categoriesPreviewSection.classList.add('inactive');
     genericSection.classList.remove('inactive');
     movieDetailSection.classList.add('inactive');
+
+    headerCategoryTitle.innerHTML = 'Tendencias';
+
+    getTrendingMovies();
 }
 
 function searchPage() {
