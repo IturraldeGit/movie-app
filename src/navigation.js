@@ -1,4 +1,7 @@
 let historyArr = [];
+let maxPage;
+let page = 1;
+let infinteScroll;
 
 searchFormBtn.addEventListener('click', () => {
     location.hash = '#search=' + searchFormInput.value;
@@ -19,10 +22,25 @@ arrowBtn.addEventListener('click', () => {
 
 window.addEventListener('DOMContentLoaded', navigator, false);
 window.addEventListener('hashchange', navigator, false);
+window.addEventListener('scroll', infinteScroll, false);
 
 
 function navigator() {
+
     console.log({ location });
+
+    page = 1;
+
+    if (infinteScroll) {
+
+        window.removeEventListener(
+            'scroll',
+            infinteScroll,
+            { passive: false }
+        );
+        infinteScroll = undefined;
+
+    }
 
     if (location.hash.startsWith('#trends')) {
         trendsPage();
@@ -38,10 +56,21 @@ function navigator() {
 
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
+
+    if (infinteScroll) {
+
+        window.addEventListener(
+            'scroll',
+            infinteScroll,
+            { passive: false, }
+        );
+
+    }
+
 }
 
-
 function trendsPage() {
+
     console.log('TRENDS!!');
 
     headerSection.classList.remove('header-container--long')
@@ -60,9 +89,13 @@ function trendsPage() {
     headerCategoryTitle.innerHTML = 'Tendencias';
 
     getTrendingMovies();
+
+    infinteScroll = getPaginatedTrendingMovies;
+
 }
 
 function searchPage() {
+
     console.log('SEARCH!!');
 
     headerSection.classList.remove('header-container--long')
@@ -80,9 +113,13 @@ function searchPage() {
 
     const [_, query] = location.hash.split('=');
     getMoviesBySearch(query);
+
+    infinteScroll = getPaginatedMoviesBySearch(query);
+
 }
 
 function movieDetailsPage() {
+
     console.log('MOVIE!!');
 
     headerSection.classList.add('header-container--long')
@@ -104,6 +141,7 @@ function movieDetailsPage() {
 }
 
 function categoriesPage() {
+
     console.log('CATEGORIES!!');
 
     headerSection.classList.remove('header-container--long')
@@ -126,9 +164,12 @@ function categoriesPage() {
     
     getMoviesByCategory(categoryId);
 
+    infinteScroll = getPaginatedMoviesByCategory(categoryId);
+
 }
 
 function homePage() {
+
     console.log('HOME!!');
 
     headerSection.classList.remove('header-container--long')
